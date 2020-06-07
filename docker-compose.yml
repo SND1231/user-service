@@ -16,7 +16,7 @@ services:
       DB_NAME: ramen_app
       DB_ADDRESS: db-user:3306
     networks:
-      - user_network
+      - app_network
   db-user:
     image: mysql:8.0
     restart: always
@@ -29,8 +29,8 @@ services:
       MYSQL_ROOT_PASSWORD: a1b2V4d
       MYSQL_DATABASE: ramen_app
     networks:
-      - user_network
+      - app_network
 
 networks:
-  user_network:
+  app_network:
     external: true
