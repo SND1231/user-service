@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  user:
+    tty: true
+    build: ./docker
+    container_name: user-service-container
+    working_dir: /go/src/github.com/SND1231/user_service
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./src:/go/src/github.com/SND1231/user_service
+    environment:
+      DB_USER: root
+      DB_PASSWORD: a1b2V4d
+      DB_NAME: ramen_app
+      DB_ADDRESS: db-user:3306
+    networks:
+      - user_network
+  db-user:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql-user-container
+    ports:
+      - 13306:3306
+    volumes:
+      - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: a1b2V4d
+      MYSQL_DATABASE: ramen_app
+    networks:
+      - user_network
+
+networks:
+  user_network:
+    external: true
