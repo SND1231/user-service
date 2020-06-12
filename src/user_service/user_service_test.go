@@ -1,10 +1,10 @@
 package user_service
 
 import (
-	pb "github.com/SND1231/user_service/proto"
+	pb "github.com/SND1231/user-service/proto"
 	"testing"
-	"github.com/SND1231/user_service/db"
-	"github.com/SND1231/user_service/model"
+	"github.com/SND1231/user-service/db"
+	"github.com/SND1231/user-service/model"
 )
 
 const (
@@ -20,8 +20,6 @@ func TestCheckGetUsersRequestSuccess(t *testing.T) {
 	if err != nil {
 		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
 	}
-
-	t.Log("TestCheckGetUsersRequestOffsetError終了")
 }
 
 func TestCheckGetUsersRequestLimitError(t *testing.T) {
@@ -30,43 +28,83 @@ func TestCheckGetUsersRequestLimitError(t *testing.T) {
 	if err == nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
 	}
-
-	t.Log("TestCheckGetUsersRequestLimitError終了")
 }
 
-func TestCheckCreateUserRequestSuccess(t *testing.T) {
-	CreateUser()
+func TestCheckLoginRequestSuccess(t *testing.T) {
 	request := pb.LoginRequest{Email:Email, Password: Password}
 	err := CheckLoginUserRequest(request)
 	if err != nil {
 		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
 	}
-
-	t.Log("TestCheckCreateUserRequestSuccess終了")
 }
 
-func TestCheckCreateUserRequestEmailError(t *testing.T) {
+func TestCheckLoginRequestEmailError(t *testing.T) {
 	request := pb.LoginRequest{Email:"", Password: Password}
 	err := CheckLoginUserRequest(request)
 	if err == nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
 	}
-
-	t.Log("TestCheckCreateUserRequestEmailError終了")
 }
 
-func TestCheckCreateUserRequestPasswordError(t *testing.T) {
+func TestCheckLoginRequestPasswordError(t *testing.T) {
 	request := pb.LoginRequest{Email:Email, Password: ""}
 	err := CheckLoginUserRequest(request)
 	if err == nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
 	}
-
-	initUserTable()
-	t.Log("TestCheckCreateUserRequestPasswordError終了")
 }
 
+func TestCheckCreateUserRequestSuccess(t *testing.T){
+	request := pb.CreateUserRequest{Name: Name, Email: Email,
+		PhotoUrl: PhotoUrl, Password: Password}
+	err := CheckCreateUserRequest(request)
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+}
 
+func TestCheckCreateUserRequestNameError(t *testing.T){
+	request := pb.CreateUserRequest{Name: "", Email: Email,
+		PhotoUrl: PhotoUrl, Password: Password}
+	err := CheckCreateUserRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckCreateUserRequestEmailError(t *testing.T){
+	request := pb.CreateUserRequest{Name: Name, Email: "",
+		PhotoUrl: PhotoUrl, Password: Password}
+	err := CheckCreateUserRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckCreateUserRequestPasswordError(t *testing.T){
+	request := pb.CreateUserRequest{Name: Name, Email: Email,
+		PhotoUrl: PhotoUrl, Password: ""}
+	err := CheckCreateUserRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestUserExistsByIdSuccess(t *testing.T){
+	err := UserExistsById("diff@test.com", 0)
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想：", "正常終了")
+	}
+}
+
+func TestUserExistsByIdExistsError(t *testing.T){
+	CreateUser()
+	err := UserExistsById(Email, 0)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+	initUserTable()
+}
 
 func CreateUser(){
 	user_param := model.User{Name: Name, Email: Email,

@@ -1,9 +1,9 @@
 package user_service
 
 import (
-	"github.com/SND1231/user_service/db"
-	"github.com/SND1231/user_service/model"
-	pb "github.com/SND1231/user_service/proto"
+	"github.com/SND1231/user-service/db"
+	"github.com/SND1231/user-service/model"
+	pb "github.com/SND1231/user-service/proto"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"

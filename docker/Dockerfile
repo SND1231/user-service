@@ -3,11 +3,16 @@ FROM golang:alpine
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 
-WORKDIR /go/src/github.com/SND1231/user_service
+WORKDIR /go/src/github.com/SND1231/user-service
 
 RUN apk update \
- && apk add vim curl git \
- && go get -u github.com/dgrijalva/jwt-go \
+ && apk add vim curl git
+
+COPY ./src .
+RUN git clone https://github.com/SND1231/proto-files.git \
+ && mkdir proto \
+ && cp -pr ./proto-files/user/* /go/src/github.com/SND1231/user-service/proto
+RUN go get -u github.com/dgrijalva/jwt-go \
  && go get -u github.com/golang/protobuf \
  && go get -u github.com/gorilla/handlers \
  && go get -u github.com/grpc-ecosystem/grpc-gateway \
@@ -15,4 +20,5 @@ RUN apk update \
  && go get -u golang.org/x/crypto \
  && go get -u golang.org/x/net \
  && go get -u google.golang.org/appengine \
- && go get -u google.golang.org/grpc
+ && go get -u google.golang.org/grpc \
+ && go get -u github.com/stretchr/testify/assert

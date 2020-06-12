@@ -1,10 +1,10 @@
 package app_service
 
 import (
-	"github.com/SND1231/user_service/db"
-	"github.com/SND1231/user_service/model"
-	pb "github.com/SND1231/user_service/proto"
-	"github.com/SND1231/user_service/user_service"
+	"github.com/SND1231/user-service/db"
+	"github.com/SND1231/user-service/model"
+	pb "github.com/SND1231/user-service/proto"
+	"github.com/SND1231/user-service/user_service"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
