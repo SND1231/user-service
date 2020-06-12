@@ -103,7 +103,7 @@ func TestUserExistsByIdExistsError(t *testing.T){
 	if err == nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
 	}
-	initUserTable()
+	InitUserTable()
 }
 
 func CreateUser(){
@@ -114,7 +114,7 @@ func CreateUser(){
 	db.Create(&user_param)
 }
 
-func initUserTable(){
+func InitUserTable(){
 	db := db.Connection()
 	var u model.User
 	db.Delete(&u)
