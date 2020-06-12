@@ -1,25 +1,25 @@
 package app_service
 
 import (
-	pb "github.com/SND1231/user-service/proto"
-	"testing"
 	"github.com/SND1231/user-service/db"
 	"github.com/SND1231/user-service/model"
-	"github.com/stretchr/testify/assert"
+	pb "github.com/SND1231/user-service/proto"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 const (
-	Name = "テスト"
-	Email = "test@test.com"
+	Name     = "テスト"
+	Email    = "test@test.com"
 	PhotoUrl = "https://test"
 	Password = "abcd1234"
 )
 
-func TestGetUsers(t *testing.T){
+func TestGetUsers(t *testing.T) {
 	InitUserTable()
 	CreateUserForTest()
-	request := pb.GetUsersRequest{Limit:1, Offset:0, Id:0, Name:""}
+	request := pb.GetUsersRequest{Limit: 1, Offset: 0, Id: 0, Name: ""}
 	users, err := GetUsers(request)
 
 	if err != nil {
@@ -27,10 +27,10 @@ func TestGetUsers(t *testing.T){
 	}
 	assert.Equal(t, Name, users[0].Name, "The two words should be the same.")
 	assert.Equal(t, Email, users[0].Email, "The two words should be the same.")
-	assert.Equal(t, PhotoUrl,users[0].PhotoUrl,  "The two words should be the same.")
+	assert.Equal(t, PhotoUrl, users[0].PhotoUrl, "The two words should be the same.")
 }
 
-func TestGetUser(t *testing.T){
+func TestGetUser(t *testing.T) {
 	InitUserTable()
 	CreateUserForTest()
 	id := GetUserID()
@@ -44,29 +44,29 @@ func TestGetUser(t *testing.T){
 	assert.Equal(t, PhotoUrl, user.PhotoUrl, "The two words should be the same.")
 }
 
-func TestCreateUser(t *testing.T){
+func TestCreateUser(t *testing.T) {
 	InitUserTable()
 
 	user_id := GetUserID() + 1
-	request := pb.CreateUserRequest{Name:Name, Email: "create@test.com",
-									PhotoUrl: PhotoUrl, Password: Password}
+	request := pb.CreateUserRequest{Name: Name, Email: "create@test.com",
+		PhotoUrl: PhotoUrl, Password: Password}
 
-	id , token, err := CreateUser(request)
+	id, token, err := CreateUser(request)
 	if err != nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", err)
 	}
 	token_test := GetTokenForTest("create@test.com")
 	assert.Equal(t, user_id, id, "The two words should be the same.")
-	assert.Equal(t, token_test,  token, "The two words should be the same.")
+	assert.Equal(t, token_test, token, "The two words should be the same.")
 }
 
-func TestUpdateUser(t *testing.T){
+func TestUpdateUser(t *testing.T) {
 	InitUserTable()
 	CreateUserForTest()
-	
+
 	id := GetUserID()
-	request := pb.UpdateUserRequest{Id:id, Name:Name, PhotoUrl: "https://update"}
-	id , err := UpdateUser(request)
+	request := pb.UpdateUserRequest{Id: id, Name: Name, PhotoUrl: "https://update"}
+	id, err := UpdateUser(request)
 	if err != nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", err)
 	}
@@ -77,10 +77,7 @@ func TestUpdateUser(t *testing.T){
 	assert.Equal(t, "https://update", user.PhotoUrl, "The two words should be the same.")
 }
 
-
-
-
-func CreateUserForTest(){
+func CreateUserForTest() {
 	user_param := model.User{Name: Name, Email: Email,
 		PhotoUrl: PhotoUrl, Password: Password}
 	db := db.Connection()
@@ -88,7 +85,7 @@ func CreateUserForTest(){
 	db.Create(&user_param)
 }
 
-func InitUserTable(){
+func InitUserTable() {
 	db := db.Connection()
 	var u model.User
 	db.Delete(&u)
@@ -102,7 +99,7 @@ func GetUserID() int32 {
 	return count
 }
 
-func GetUserById(id int32) model.User{
+func GetUserById(id int32) model.User {
 	var user model.User
 
 	db := db.Connection()
