@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/SND1231/user_service/db"
-	"github.com/SND1231/user_service/model"
 	"fmt"
+	"github.com/SND1231/user-service/db"
+	"github.com/SND1231/user-service/model"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 

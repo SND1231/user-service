@@ -1,10 +1,10 @@
 package db
 
 import (
-	"os"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"os"
 )
 
 func Connection() *gorm.DB {

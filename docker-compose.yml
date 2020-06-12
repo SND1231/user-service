@@ -3,13 +3,22 @@ version: "3"
 services:
   user:
     tty: true
-    build: ./docker
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile
     container_name: user-service-container
-    working_dir: /go/src/github.com/SND1231/user_service
+    working_dir: /go/src/github.com/SND1231/user-service
     ports:
       - "9001:9001"
     volumes:
-      - ./src:/go/src/github.com/SND1231/user_service
+      - ./src/db:/go/src/github.com/SND1231/user-service/db
+      - ./src/go.mod:/go/src/github.com/SND1231/user-service/go.mod
+      - ./src/go.sum:/go/src/github.com/SND1231/user-service/go.sum
+      - ./src/main.go:/go/src/github.com/SND1231/user-service/main.go
+      - ./src/migration:/go/src/github.com/SND1231/user-service/migration
+      - ./src/model:/go/src/github.com/SND1231/user-service/model
+      - ./src/user_app_service:/go/src/github.com/SND1231/user-service/user_app_service
+      - ./src/user_service:/go/src/github.com/SND1231/user-service/user_service
     environment:
       DB_USER: root
       DB_PASSWORD: a1b2V4d
@@ -19,12 +28,12 @@ services:
       - app_network
   db-user:
     image: mysql:8.0
-    restart: always
     container_name: mysql-user-container
     ports:
       - 13306:3306
     volumes:
       - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/data/init.sql:/tmp/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: a1b2V4d
       MYSQL_DATABASE: ramen_app

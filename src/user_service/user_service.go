@@ -1,10 +1,10 @@
 package user_service
 
 import (
-	"github.com/SND1231/user_service/db"
-	"github.com/SND1231/user_service/model"
-	pb "github.com/SND1231/user_service/proto"
 	"fmt"
+	"github.com/SND1231/user-service/db"
+	"github.com/SND1231/user-service/model"
+	pb "github.com/SND1231/user-service/proto"
 	"github.com/dgrijalva/jwt-go"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -41,9 +41,6 @@ func CheckGetUsersRequest(request pb.GetUsersRequest) error {
 	var error_list []*errdetails.BadRequest_FieldViolation
 	if request.Limit == 0 {
 		error_list = append(error_list, CreateBadRequest_FieldViolation("Limit", "値が設定されていません"))
-	}
-	if request.Limit == 0 {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("id", "値が設定されていません"))
 	}
 
 	if len(error_list) > 0 {
