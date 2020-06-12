@@ -42,9 +42,6 @@ func CheckGetUsersRequest(request pb.GetUsersRequest) error {
 	if request.Limit == 0 {
 		error_list = append(error_list, CreateBadRequest_FieldViolation("Limit", "値が設定されていません"))
 	}
-	if request.Limit == 0 {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("id", "値が設定されていません"))
-	}
 
 	if len(error_list) > 0 {
 		return CreateError(codes.InvalidArgument, error_list)

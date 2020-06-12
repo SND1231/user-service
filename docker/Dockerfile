@@ -1,6 +1,7 @@
 FROM golang:alpine
 
 ENV GO111MODULE=on
+ENV CGO_ENABLED=0
 
 WORKDIR /go/src/github.com/SND1231/user_service
 
