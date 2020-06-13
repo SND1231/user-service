@@ -22,10 +22,14 @@ jobs:
           command: docker-compose up -d
 
       - run: dockerize -wait tcp://127.0.0.1:13306 -timeout 120s
+
+      - run:
+          name: ping-test
+          command: docker-compose exec user ping db-user -c 5
       
       - run:
           name: testing
-          command: docker exec user-service-container make
+          command: docker-compose exec user make
 
 workflows:
   version: 2
