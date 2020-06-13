@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   test:
     machine: true
@@ -8,7 +9,7 @@ jobs:
 
       - run:
           name: create docker network
-          command: docker network create my_network
+          command: docker network create app_network
 
       - run:
           name: dockerize install
