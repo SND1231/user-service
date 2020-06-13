@@ -30,6 +30,14 @@ jobs:
       - run:
           name: check ps
           command: docker ps
+      
+      - run:
+          name: migration
+          command: docker-compose exec user go run migration/migration.go
+      
+      - run:
+          name: testing
+          command: docker-compose exec user make
 
 workflows:
   version: 2
