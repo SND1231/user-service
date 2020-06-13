@@ -17,7 +17,7 @@ jobs:
       
       - run:
           name: wait connect DB
-          command: docker exec user-service-container dockerize -timeout 60s -wait tcp://db-user:3306
+          command: docker exec user-service-container dockerize -timeout 120s -wait tcp://db-user:3306
 
       - run:
           name: testing
