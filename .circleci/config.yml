@@ -25,19 +25,12 @@ jobs:
 
       - run:
           name: ping-test
-          command: docker-compose exec user ping db-user:13306 -c 5
+          command: docker-compose exec user ping db-user:3306 -c 5
 
       - run:
           name: check ps
           command: docker ps
-      
-      - run:
-          name: migration
-          command: docker-compose exec user go run migration/migration.go
-      
-      - run:
-          name: testing
-          command: docker-compose exec user make
+
 
 workflows:
   version: 2
