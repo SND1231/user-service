@@ -17,6 +17,10 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
 
+      - run:
+          name: docker-compose up
+          command: docker-compose up -d
+
       - run: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
       
       - run:
