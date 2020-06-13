@@ -12,12 +12,16 @@ jobs:
           command: docker network create app_network
 
       - run:
+          name: check
+          command: ls;cd project;ls
+
+      - run:
           name: docker-compose up
           command: docker-compose up -d
       
       - run:
           name: wait connect DB
-          command: docker exec user-service-container dockerize -timeout 120s -wait tcp://db-user:3306
+          command: docker exec user-service-container dockerize -timeout 180s -wait tcp://db-user:3306
 
       - run:
           name: testing
