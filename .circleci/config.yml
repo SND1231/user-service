@@ -12,18 +12,16 @@ jobs:
           command: docker network create app_network
 
       - run:
-          name: dockerize install
-          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-          environment:
-            DOCKERIZE_VERSION: v0.3.0
-
-      - run:
           name: docker-compose up
           command: docker-compose up -d
+      
+      - run:
+          name: wait connect DB
+          command: docker exec user-service-container dockerize -timeout 60s -wait tcp://db-user:3306
 
       - run:
           name: testing
-          command: docker-compose exec user make
+          command: docker exec user-service-container make
 
 workflows:
   version: 2
