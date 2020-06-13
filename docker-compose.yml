@@ -23,7 +23,7 @@ services:
       DB_USER: root
       DB_PASSWORD: a1b2V4d
       DB_NAME: ramen_app
-      DB_ADDRESS: db-user:3306
+      DB_ADDRESS: db-user:13306
     networks:
       - app_network
   db-user:
