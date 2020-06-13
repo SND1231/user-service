@@ -12,10 +12,6 @@ jobs:
           command: docker network create app_network
 
       - run:
-          name: check
-          command: ls;cd project;ls
-
-      - run:
           name: docker-compose up
           command: docker-compose up -d
       
