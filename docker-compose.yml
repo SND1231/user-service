@@ -27,7 +27,7 @@ services:
     networks:
       - app_network
   db-user:
-    image: circleci/mysql:8.0
+    image: mysql:8.0
     container_name: mysql-user-container
     ports:
       - 13306:3306
@@ -43,3 +43,4 @@ services:
 networks:
   app_network:
     external: true
+  
