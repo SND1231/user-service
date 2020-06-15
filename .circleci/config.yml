@@ -17,15 +17,18 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
       
-      - setup_remote_docker
-
       - run:
-          name: docker-compose build
-          command: docker-compose build
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run:
           name: docker-compose up
-          command: docker-compose up -d
+          command: |
+            set -x
+            docker-compose up --build -d
 
       - run: dockerize -wait tcp://127.0.0.1:13306 -timeout 120s
 
