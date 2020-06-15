@@ -30,7 +30,7 @@ services:
     image: mysql:8.0
     container_name: mysql-user-container
     ports:
-      - 3306:3306
+      - 13306:3306
     volumes:
       - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql/data/init.sql:/tmp/init.sql
@@ -43,4 +43,4 @@ services:
 networks:
   app_network:
     external: true
-  
+    
