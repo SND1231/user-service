@@ -29,6 +29,18 @@ jobs:
           command: |
             set -x
             docker-compose up --build -d
+      
+      - run:
+          name: docker-compose stop
+          command: |
+            set -x
+            docker-compose stop
+
+      - run:
+          name: docker-compose up
+          command: |
+            set -x
+            docker-compose up -d
 
       - run: dockerize -wait tcp://127.0.0.1:13306 -timeout 120s
 
