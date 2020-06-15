@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
   test:
@@ -40,7 +40,7 @@ jobs:
           command: docker-compose exec user make
 
 workflows:
-  version: 2
+  version: 2.1
   build-test-and-deploy:
     jobs:
       - test
