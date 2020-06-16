@@ -43,8 +43,7 @@ jobs:
           command: docker-compose exec user make
 
   image-push:
-    docker:
-      - image: docker:18.09
+    machine: true
     steps:
       - checkout
       - run:
