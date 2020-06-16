@@ -51,13 +51,13 @@ jobs:
           command: docker-compose build
       - run:
           name: Tag to latest
-          command: docker tag ${DOCKER_USER}/${IMAGE_NAME}:latest ${DOCKER_USER}/${IMAGE_NAME}:$CIRCLE_TAG
+          command: docker tag ${IMAGE_NAME}:latest ${DOCKER_USER}/${IMAGE_NAME}:latest
       - run:
           name: Docker Login
           command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
       - run:
           name: Push image to registory
-          command: docker push ${OWNER}/${IMAGE_NAME}
+          command: docker push ${DOCKER_USER}/${IMAGE_NAME}
 workflows:
   version: 2.1
   build-test-and-deploy:
