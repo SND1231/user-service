@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `photo_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `photo_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'テストログインユーザー','testuser@test.com','https://msp.c.yimg.jp/yjimage?q=GPugfsgXyLEtbvFl0k1rup2x8BjmM3COb2OSusjzsKIUWYIKz43JQKQ8xeF6m4UCX2Jnu5AsvfcK5Qy2peAm2d0k5sNaGI3P8_4zvrsChSfuhd0PoY4w1P_ZW3Ax4Zv3ML6gHa9t0dBU1edGEuZtjNI-&sig=13ct4akcu&x=297&y=170','$2a$10$wKA2J87iqo3DFRvwdTGRoeQH3dBdk8Ix8ImUylYQ/zeTLO6tto4Xa','2020-06-11 23:32:40','2020-06-11 23:32:40',NULL),(2,'ラーメン太郎','taro@test.com','https://ord.yahoo.co.jp/o/image/RV=1/RE=1592004934/RH=b3JkLnlhaG9vLmNvLmpw/RB=/RU=aHR0cHM6Ly93d3cuaXJhc3V0b3lhLmNvbS8yMDEyLzAzL2Jsb2ctcG9zdF8wMy5odG1s/RS=%5EADBt_Qa0NjScqtVqwq8Vh_xvS3qwSA-;_ylt=A2RimVTFv.Je_Q4AZw6U3uV7','$2a$10$jyQPRi56R8.AiwtfTkQY0.Lmsmd.ik/4vG9YbZMyBh3GjYi7E3USO','2020-06-11 23:36:33','2020-06-11 23:36:33',NULL),(3,'ジロリアン','jiro@test.com','https://msp.c.yimg.jp/yjimage?q=ZdXdH.sXyLG2xpRU9BcWwm5GEPCLmH9ZuNHX8clzVGezPWLLRv3ar5lhw8VNP8X5_gOSuoRMrET8IV3nLEI3CGAmhF65lietcAfXuS1PEaQYR2qfqd93pIYyhvNGagoJDHZU14xqt16brXSxVIJ1&sig=13al3m4mh&x=259&y=194','$2a$10$8cx45xk.XA6cTZ1lJqPc.eLWuRk1HjL3NHfk5eUPvW762YK6WTeQa','2020-06-11 23:37:49','2020-06-11 23:37:49',NULL);
+INSERT INTO `users` VALUES (1,'テストログインユーザー','testuser@test.com','https://msp.c.yimg.jp/yjimage?q=GPugfsgXyLEtbvFl0k1rup2x8BjmM3COb2OSusjzsKIUWYIKz43JQKQ8xeF6m4UCX2Jnu5AsvfcK5Qy2peAm2d0k5sNaGI3P8_4zvrsChSfuhd0PoY4w1P_ZW3Ax4Zv3ML6gHa9t0dBU1edGEuZtjNI-&sig=13ct4akcu&x=297&y=170','$2a$10$wKA2J87iqo3DFRvwdTGRoeQH3dBdk8Ix8ImUylYQ/zeTLO6tto4Xa','2020-06-11 23:32:40','2020-06-11 23:32:40',NULL),(2,'ラーメン太郎','taro@test.com','http://res.cloudinary.com/dxo10noyu/raw/upload/v1592396338/pfqdr8n6usuhrj7hiond.jpg','$2a$10$jyQPRi56R8.AiwtfTkQY0.Lmsmd.ik/4vG9YbZMyBh3GjYi7E3USO','2020-06-11 23:36:33','2020-06-11 23:36:33',NULL),(3,'ジロリアン','jiro@test.com','https://msp.c.yimg.jp/yjimage?q=ZdXdH.sXyLG2xpRU9BcWwm5GEPCLmH9ZuNHX8clzVGezPWLLRv3ar5lhw8VNP8X5_gOSuoRMrET8IV3nLEI3CGAmhF65lietcAfXuS1PEaQYR2qfqd93pIYyhvNGagoJDHZU14xqt16brXSxVIJ1&sig=13al3m4mh&x=259&y=194','$2a$10$8cx45xk.XA6cTZ1lJqPc.eLWuRk1HjL3NHfk5eUPvW762YK6WTeQa','2020-06-11 23:37:49','2020-06-11 23:37:49',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-11 23:43:22
+-- Dump completed on 2020-06-17 13:04:14
