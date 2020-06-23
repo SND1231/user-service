@@ -12,13 +12,13 @@ import (
 	"log"
 )
 
-//error_list [], err_msg string
-func CreateError(code codes.Code, error_list []*errdetails.BadRequest_FieldViolation) error {
+//errorList [], err_msg string
+func CreateError(code codes.Code, errorList []*errdetails.BadRequest_FieldViolation) error {
 	st := status.New(codes.InvalidArgument, "エラー発生")
 	// add error message detail
 	st, err := st.WithDetails(
 		&errdetails.BadRequest{
-			FieldViolations: error_list,
+			FieldViolations: errorList,
 		},
 	)
 	// unexpected error
@@ -30,7 +30,7 @@ func CreateError(code codes.Code, error_list []*errdetails.BadRequest_FieldViola
 	return st.Err()
 }
 
-func CreateBadRequest_FieldViolation(feild string, desc string) *errdetails.BadRequest_FieldViolation {
+func CreateBadRequestFieldViolation(feild string, desc string) *errdetails.BadRequest_FieldViolation {
 	return &errdetails.BadRequest_FieldViolation{
 		Field:       feild,
 		Description: desc,
@@ -38,48 +38,48 @@ func CreateBadRequest_FieldViolation(feild string, desc string) *errdetails.BadR
 }
 
 func CheckGetUsersRequest(request pb.GetUsersRequest) error {
-	var error_list []*errdetails.BadRequest_FieldViolation
+	var errorList []*errdetails.BadRequest_FieldViolation
 	if request.Limit == 0 {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("Limit", "値が設定されていません"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("Limit", "値が設定されていません"))
 	}
 
-	if len(error_list) > 0 {
-		return CreateError(codes.InvalidArgument, error_list)
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
 	} else {
 		return nil
 	}
 }
 
 func CheckLoginUserRequest(request pb.LoginRequest) error {
-	var error_list []*errdetails.BadRequest_FieldViolation
+	var errorList []*errdetails.BadRequest_FieldViolation
 	if request.Email == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("Email", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("Email", "必須です"))
 	}
 	if request.Password == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("Password", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("Password", "必須です"))
 	}
 
-	if len(error_list) > 0 {
-		return CreateError(codes.InvalidArgument, error_list)
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
 	} else {
 		return nil
 	}
 }
 
 func CheckCreateUserRequest(request pb.CreateUserRequest) error {
-	var error_list []*errdetails.BadRequest_FieldViolation
+	var errorList []*errdetails.BadRequest_FieldViolation
 	if request.Name == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("名前", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("名前", "必須です"))
 	}
 	if request.Email == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("Email", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("Email", "必須です"))
 	}
 	if request.Password == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("パスワード", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("パスワード", "必須です"))
 	}
 
-	if len(error_list) > 0 {
-		return CreateError(codes.InvalidArgument, error_list)
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
 	} else {
 		return nil
 	}
@@ -107,13 +107,13 @@ func CheckUserExistsForUpdate(email string, id int) error {
 }
 
 func CheckUpdateUserRequest(request pb.UpdateUserRequest) error {
-	var error_list []*errdetails.BadRequest_FieldViolation
+	var errorList []*errdetails.BadRequest_FieldViolation
 	if request.Name == "" {
-		error_list = append(error_list, CreateBadRequest_FieldViolation("名前", "必須です"))
+		errorList = append(errorList, CreateBadRequestFieldViolation("名前", "必須です"))
 	}
 
-	if len(error_list) > 0 {
-		return CreateError(codes.InvalidArgument, error_list)
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
 	} else {
 		return nil
 	}

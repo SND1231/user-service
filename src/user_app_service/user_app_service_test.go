@@ -47,7 +47,7 @@ func TestGetUser(t *testing.T) {
 func TestCreateUser(t *testing.T) {
 	InitUserTable()
 
-	user_id := GetUserID() + 1
+	userId := GetUserID() + 1
 	request := pb.CreateUserRequest{Name: Name, Email: "create@test.com",
 		PhotoUrl: PhotoUrl, Password: Password}
 
@@ -55,9 +55,9 @@ func TestCreateUser(t *testing.T) {
 	if err != nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", err)
 	}
-	token_test := GetTokenForTest("create@test.com")
-	assert.Equal(t, user_id, id, "The two words should be the same.")
-	assert.Equal(t, token_test, token, "The two words should be the same.")
+	tokenTest := GetTokenForTest("create@test.com")
+	assert.Equal(t, userId, id, "The two words should be the same.")
+	assert.Equal(t, tokenTest, token, "The two words should be the same.")
 }
 
 func TestUpdateUser(t *testing.T) {
@@ -78,11 +78,11 @@ func TestUpdateUser(t *testing.T) {
 }
 
 func CreateUserForTest() {
-	user_param := model.User{Name: Name, Email: Email,
+	userParam := model.User{Name: Name, Email: Email,
 		PhotoUrl: PhotoUrl, Password: Password}
 	db := db.Connection()
 	defer db.Close()
-	db.Create(&user_param)
+	db.Create(&userParam)
 }
 
 func InitUserTable() {
