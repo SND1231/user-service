@@ -65,6 +65,22 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 	}
 }
 
+func (s *server) CreateComment(ctx context.Context, in *pb.CreateCommentRequest) (*pb.CreateCommentResponse, error) {
+	var request = *in
+	var id, err = user_app_service.CreateComment(request)
+	if err == nil {
+		return &pb.CreateCommentResponse{Id: id}, nil
+	} else {
+		return &pb.CreateCommentResponse{}, err
+	}
+}
+
+// GET Comments
+func (s *server) GetComments(ctx context.Context, in *pb.GetCommentsRequest) (*pb.GetCommentsResponse, error) {
+	comments, count, err := user_app_service.GetComments(*in)
+	return &pb.GetCommentsResponse{Comments: comments, Count: count}, err
+}
+
 func main() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

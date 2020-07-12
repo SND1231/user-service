@@ -122,3 +122,51 @@ func UpdateUser(request pb.UpdateUserRequest) (int32, error) {
 	return id, nil
 
 }
+
+func CreateComment(request pb.CreateCommentRequest) (int32, error) {
+	err := user_service.CheckCreateCommentRequest(request)
+	if err != nil {
+		return -1, err
+	}
+
+	commentParam := model.Comment{UserId: request.UserId, PostId: request.PostId,
+		Content: request.Content}
+	
+	db := db.Connection()
+	defer db.Close()
+	db.Create(&commentParam)
+	if db.NewRecord(commentParam) == false {
+		return commentParam.ID, err
+	}
+	return -1, status.New(codes.Unknown, "作成失敗").Err()
+}
+
+func GetComments(request pb.GetCommentsRequest) ([]*pb.Comment, int32, error) {
+	var comments []model.Comment
+	var commentList []*pb.Comment
+	var count int32
+	var user model.User
+
+	err := user_service.CheckGetCommentsRequest(request)
+	if err != nil {
+		return commentList, 0, err
+	}
+
+	limit := request.Limit
+	offset := limit * (request.Offset - 1)
+
+	db := db.Connection()
+	defer db.Close()
+	db.Where("post_id = ?", request.PostId).Limit(limit).Offset(offset).Order("id desc").Find(&comments).Scan(&commentList)
+	db.Table("comments").Where("post_id = ?", request.PostId).Find(&comments).Count(&count)
+
+	for i := 0; i < len(commentList); i++ {
+		user = model.User{}
+		db.Find(&user, commentList[i].UserId)
+
+		commentList[i].Name = user.Name
+		commentList[i].PhotoUrl = user.PhotoUrl
+	}
+
+	return commentList, count, nil
+}

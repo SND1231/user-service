@@ -138,3 +138,39 @@ func CreateToken(user model.User) (string, error) {
 
 	return tokenString, nil
 }
+
+func CheckCreateCommentRequest(request pb.CreateCommentRequest) error {
+	var errorList []*errdetails.BadRequest_FieldViolation
+
+	if request.UserId == 0 {
+		errorList = append(errorList, CreateBadRequestFieldViolation("UserID", "値が設定されていません"))
+	}
+	if request.PostId == 0 {
+		errorList = append(errorList, CreateBadRequestFieldViolation("PostId", "値が設定されていません"))
+	}
+	if request.Content == "" {
+		errorList = append(errorList, CreateBadRequestFieldViolation("Content", "値が設定されていません"))
+	}
+
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
+	} else {
+		return nil
+	}
+}
+
+func CheckGetCommentsRequest(request pb.GetCommentsRequest) error {
+	var errorList []*errdetails.BadRequest_FieldViolation
+	if request.PostId == 0 {
+		errorList = append(errorList, CreateBadRequestFieldViolation("PostId", "値が設定されていません"))
+	}
+	if request.Limit == 0 {
+		errorList = append(errorList, CreateBadRequestFieldViolation("Limit", "値が設定されていません"))
+	}
+
+	if len(errorList) > 0 {
+		return CreateError(codes.InvalidArgument, errorList)
+	} else {
+		return nil
+	}
+}
