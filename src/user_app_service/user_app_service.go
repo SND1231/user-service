@@ -106,11 +106,6 @@ func UpdateUser(request pb.UpdateUserRequest) (int32, error) {
 	}
 
 	var id = request.Id
-	err = user_service.CheckUserExistsForUpdate(request.Email, int(id))
-	if err != nil {
-		return -1, err
-	}
-
 	userParam := model.User{Name: request.Name, PhotoUrl: request.PhotoUrl}
 
 	db := db.Connection()
@@ -131,7 +126,7 @@ func CreateComment(request pb.CreateCommentRequest) (int32, error) {
 
 	commentParam := model.Comment{UserId: request.UserId, PostId: request.PostId,
 		Content: request.Content}
-	
+
 	db := db.Connection()
 	defer db.Close()
 	db.Create(&commentParam)
@@ -145,7 +140,6 @@ func GetComments(request pb.GetCommentsRequest) ([]*pb.Comment, int32, error) {
 	var comments []model.Comment
 	var commentList []*pb.Comment
 	var count int32
-	var user model.User
 
 	err := user_service.CheckGetCommentsRequest(request)
 	if err != nil {
@@ -159,14 +153,6 @@ func GetComments(request pb.GetCommentsRequest) ([]*pb.Comment, int32, error) {
 	defer db.Close()
 	db.Where("post_id = ?", request.PostId).Limit(limit).Offset(offset).Order("id desc").Find(&comments).Scan(&commentList)
 	db.Table("comments").Where("post_id = ?", request.PostId).Find(&comments).Count(&count)
-
-	for i := 0; i < len(commentList); i++ {
-		user = model.User{}
-		db.Find(&user, commentList[i].UserId)
-
-		commentList[i].Name = user.Name
-		commentList[i].PhotoUrl = user.PhotoUrl
-	}
 
 	return commentList, count, nil
 }

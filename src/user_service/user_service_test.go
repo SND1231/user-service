@@ -1,9 +1,11 @@
 package user_service
 
 import (
+	"errors"
 	"github.com/SND1231/user-service/db"
 	"github.com/SND1231/user-service/model"
 	pb "github.com/SND1231/user-service/proto"
+	"github.com/dgrijalva/jwt-go"
 	"testing"
 )
 
@@ -12,6 +14,10 @@ const (
 	Email    = "test@test.com"
 	PhotoUrl = "https://test"
 	Password = "abcd1234"
+
+	UserId  = 9999
+	PostId  = 99999
+	Content = "美味しかった"
 )
 
 func TestCheckGetUsersRequestSuccess(t *testing.T) {
@@ -98,24 +104,161 @@ func TestUserExistsByIdSuccess(t *testing.T) {
 }
 
 func TestUserExistsByIdExistsError(t *testing.T) {
-	CreateUser()
+	_ = CreateUserForTest()
 	err := UserExistsById(Email, 0)
+
 	if err == nil {
 		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
 	}
 	InitUserTable()
 }
 
-func CreateUser() {
-	user_param := model.User{Name: Name, Email: Email,
+func TestCheckUserExistsSuccess(t *testing.T) {
+	err := CheckUserExists("diff@test.com")
+
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想：", "正常終了")
+	}
+}
+
+func TestCheckUserExistsExistsError(t *testing.T) {
+	_ = CreateUserForTest()
+	err := CheckUserExists(Email)
+
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+	InitUserTable()
+}
+
+func TestCheckUpdateUserRequestSuccess(t *testing.T) {
+	request := pb.UpdateUserRequest{Name: Name, PhotoUrl: PhotoUrl}
+	err := CheckUpdateUserRequest(request)
+
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+}
+
+func TestCheckUpdateUserRequestNameError(t *testing.T) {
+	request := pb.UpdateUserRequest{Name: "", PhotoUrl: PhotoUrl}
+	err := CheckUpdateUserRequest(request)
+
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCreateTokenSuccess(t *testing.T) {
+	userId := CreateUserForTest()
+	user := GetUserForTest(userId)
+	tokenCreated, errCreated := CreateToken(user)
+
+	if errCreated != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+
+	token, err := jwt.Parse(tokenCreated, func(token *jwt.Token) (interface{}, error) {
+		//HMAC(共通),ECDSA,RSA(公開)
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("alg error")
+		}
+		//keyを返す
+		return []byte("secret"), nil
+	})
+
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+
+	if !token.Valid {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+}
+
+func TestCheckCreateCommentRequestSuccess(t *testing.T) {
+	request := pb.CreateCommentRequest{UserId: UserId, PostId: PostId,
+		Content: Content}
+	err := CheckCreateCommentRequest(request)
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+}
+
+func TestCheckCreateCommentRequestUserIdError(t *testing.T) {
+	request := pb.CreateCommentRequest{UserId: 0, PostId: PostId,
+		Content: Content}
+	err := CheckCreateCommentRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckCreateCommentRequestPostIdError(t *testing.T) {
+	request := pb.CreateCommentRequest{UserId: UserId, PostId: 0,
+		Content: Content}
+	err := CheckCreateCommentRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckCreateCommentRequestContentError(t *testing.T) {
+	request := pb.CreateCommentRequest{UserId: UserId, PostId: PostId,
+		Content: ""}
+	err := CheckCreateCommentRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckGetCommentsRequestSuccess(t *testing.T) {
+	request := pb.GetCommentsRequest{Limit: 1, Offset: 0, PostId: PostId}
+	err := CheckGetCommentsRequest(request)
+	if err != nil {
+		t.Error("\n実際： ", "エラー", "\n理想： ", "正常終了")
+	}
+}
+
+func TestCheckGetCommentsRequestPostIdError(t *testing.T) {
+	request := pb.GetCommentsRequest{Limit: 1, Offset: 1, PostId: 0}
+	err := CheckGetCommentsRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func TestCheckGetCommentsRequestLimitError(t *testing.T) {
+	request := pb.GetCommentsRequest{Limit: 0, Offset: 1, PostId: PostId}
+	err := CheckGetCommentsRequest(request)
+	if err == nil {
+		t.Error("\n実際： ", "正常終了", "\n理想： ", "エラー")
+	}
+}
+
+func CreateUserForTest() int32 {
+	user := model.User{Name: Name, Email: Email,
 		PhotoUrl: PhotoUrl, Password: Password}
 	db := db.Connection()
 	defer db.Close()
-	db.Create(&user_param)
+	db.Create(&user)
+
+	return user.ID
+}
+
+func GetUserForTest(id int32) model.User {
+	var user model.User
+	db := db.Connection()
+	defer db.Close()
+	db.Find(&user, id)
+
+	return user
 }
 
 func InitUserTable() {
 	db := db.Connection()
-	var u model.User
-	db.Delete(&u)
+	defer db.Close()
+
+	db.Exec("DELETE FROM comments")
+	db.Exec("DELETE FROM users")
 }

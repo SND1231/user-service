@@ -85,7 +85,7 @@ func CheckCreateUserRequest(request pb.CreateUserRequest) error {
 	}
 }
 
-func UserExistsById(email string, id int) error {
+func UserExistsById(email string, id int32) error {
 	var user model.User
 	db := db.Connection()
 	defer db.Close()
@@ -100,10 +100,6 @@ func UserExistsById(email string, id int) error {
 
 func CheckUserExists(email string) error {
 	return UserExistsById(email, 0)
-}
-
-func CheckUserExistsForUpdate(email string, id int) error {
-	return UserExistsById(email, id)
 }
 
 func CheckUpdateUserRequest(request pb.UpdateUserRequest) error {
