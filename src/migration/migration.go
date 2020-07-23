@@ -13,4 +13,5 @@ func main() {
 	fmt.Printf("migration")
 
 	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.Comment{})
 }
