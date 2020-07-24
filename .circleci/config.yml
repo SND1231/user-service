@@ -20,10 +20,11 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - run:
-          name: docker-compose up --build-arg SECRET_KEY=$SECRET_KEY user
+          name: docker-compose up
           command: |
             set -x
-            docker-compose up --build -d
+            docker-compose build --build-arg SECRET_KEY=$SECRET_KEY
+            docker-compose up -d
       - run:
           name: docker-compose stop
           command: |
