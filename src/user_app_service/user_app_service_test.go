@@ -8,6 +8,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
+	"os"
 	"testing"
 )
 
@@ -328,7 +329,8 @@ func CheckToken(tokenCreated string) bool {
 			return nil, errors.New("alg error")
 		}
 		//keyを返す
-		return []byte("secret"), nil
+		secret := os.Getenv("SECRET_KEY")
+		return []byte(secret), nil
 	})
 
 	if err != nil {

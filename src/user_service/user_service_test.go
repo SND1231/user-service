@@ -6,6 +6,7 @@ import (
 	"github.com/SND1231/user-service/model"
 	pb "github.com/SND1231/user-service/proto"
 	"github.com/dgrijalva/jwt-go"
+	"os"
 	"testing"
 )
 
@@ -163,8 +164,9 @@ func TestCreateTokenSuccess(t *testing.T) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("alg error")
 		}
+		secret := os.Getenv("SECRET_KEY")
 		//keyを返す
-		return []byte("secret"), nil
+		return []byte(secret), nil
 	})
 
 	if err != nil {
