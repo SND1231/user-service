@@ -23,7 +23,7 @@ jobs:
           name: docker-compose up
           command: |
             set -x
-            docker-compose build --build-arg SECRET_KEY=$SECRET_KEY
+            docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
             docker-compose up -d
       - run:
           name: docker-compose stop
