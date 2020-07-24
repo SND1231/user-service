@@ -20,7 +20,7 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - run:
-          name: docker-compose up
+          name: docker-compose up --build-arg SECRET_KEY=$SECRET_KEY user
           command: |
             set -x
             docker-compose up --build -d
@@ -48,7 +48,7 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY
+          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
       - run:
           name: Tag to latest
           command: docker tag project_user:latest ${DOCKER_USER}/user:latest
