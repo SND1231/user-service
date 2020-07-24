@@ -48,7 +48,7 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: docker-compose build
+          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY
       - run:
           name: Tag to latest
           command: docker tag project_user:latest ${DOCKER_USER}/user:latest
