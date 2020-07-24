@@ -24,7 +24,6 @@ services:
       DB_PASSWORD: a1b2V4d
       DB_NAME: ramen_app
       DB_ADDRESS: db-user:3306
-      SECRET_KEY: secret1
     networks:
       - app_network
   db-user:
