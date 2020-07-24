@@ -23,7 +23,8 @@ jobs:
           name: docker-compose up
           command: |
             set -x
-            docker-compose up --build -d
+            docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
+            docker-compose up -d
       - run:
           name: docker-compose stop
           command: |
@@ -48,7 +49,7 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: docker-compose build
+          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
       - run:
           name: Tag to latest
           command: docker tag project_user:latest ${DOCKER_USER}/user:latest

@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
+	"os"
 )
 
 //errorList [], err_msg string
@@ -118,8 +119,8 @@ func CheckUpdateUserRequest(request pb.UpdateUserRequest) error {
 func CreateToken(user model.User) (string, error) {
 	var err error
 
-	// 鍵となる文字列(後で変更する)
-	secret := "secret"
+	// 鍵となる文字列
+	secret := os.Getenv("SECRET_KEY")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": user.Email,
