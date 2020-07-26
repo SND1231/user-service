@@ -51,17 +51,17 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: set shell and install tools
+          command: |
+            set -x; \
+            apk add --no-cache --virtual .fetch-deps curl git python py-pip less groff
+      - run:
           name: Install Docker Compose
           command: |
             curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
-      - run:
-          name: set shell and install tools
-          command: |
-            set -x; \
-            apk add --no-cache --virtual .fetch-deps curl git python py-pip less groff
       - run:
           name: install kubectl
           command: |
@@ -107,8 +107,5 @@ workflows:
   version: 2.1
   build-test-and-deploy:
     jobs:
-      - test
       - deploy:
           context: ramen_app
-          requires:
-            - test
