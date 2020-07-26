@@ -42,6 +42,23 @@ jobs:
       - run:
           name: testing
           command: docker-compose exec user make
+
+  image-push:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
+      - run:
+          name: Tag to latest
+          command: docker tag project_user:latest ${DOCKER_USER}/user:latest
+      - run:
+          name: Docker Login
+          command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+      - run:
+          name: Push image to registory
+          command: docker push ${DOCKER_USER}/user
   deploy:
     docker:
       - image: docker:18.09
@@ -55,13 +72,6 @@ jobs:
           command: |
             set -x; \
             apk add --no-cache --virtual .fetch-deps curl git python py-pip less groff
-      - run:
-          name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            mv ~/docker-compose /usr/local/bin/docker-compose
-
       - run:
           name: install kubectl
           command: |
@@ -107,5 +117,9 @@ workflows:
   version: 2.1
   build-test-and-deploy:
     jobs:
+      - image-push:
+          context: ramen_app
       - deploy:
           context: ramen_app
+          requires:
+            - image-push
