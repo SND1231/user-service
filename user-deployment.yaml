@@ -30,8 +30,8 @@ spec:
           - name: DB_USER
             value: "root"
           - name: DB_PASSWORD
-            value: "a1b2V4d"
+            value: "a1b2V4d5"
           - name: DB_NAME
             value: "ramen_app"
           - name: DB_ADDRESS
-            value: "db-user:3306"
+            value: "user-db.cdvmgnpfzvjx.ap-northeast-1.rds.amazonaws.com:3306"
