@@ -43,31 +43,12 @@ jobs:
           name: testing
           command: docker-compose exec user make
 
-  image-push:
-    machine: true
-    steps:
-      - checkout
-      - run:
-          name: Build
-          command: docker-compose build --build-arg SECRET_KEY=$SECRET_KEY user
-      - run:
-          name: Tag to latest
-          command: docker tag project_user:latest ${DOCKER_USER}/user:latest
-      - run:
-          name: Docker Login
-          command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-      - run:
-          name: Push image to registory
-          command: docker push ${DOCKER_USER}/user
-
   deploy:
     docker:
       - image: docker:18.09
     steps:
-
       - checkout
       - setup_remote_docker
-
       - run:
           name: set shell and install tools
           command: |
@@ -110,11 +91,7 @@ workflows:
   build-test-and-deploy:
     jobs:
       - test
-      - image-push:
-          context: ramen_app
-          requires:
-            - test
       - deploy:
           context: ramen_app
           requires:
-            - image-push
+            - test

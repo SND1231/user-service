@@ -6,6 +6,8 @@ build:
     context: .
     docker:
       dockerfile: ./docker/Dockerfile
+      buildArgs:
+        SECRET_KEY: "{{.SECRET_KEY}}"
   local:
     push: true
 
