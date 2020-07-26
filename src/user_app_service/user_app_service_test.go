@@ -18,6 +18,11 @@ const (
 	PhotoUrl = "https://test"
 	Password = "abcd12341231"
 
+	Name2     = "テスト"
+	Email2    = "test@test.com"
+	PhotoUrl2 = "https://test"
+	Password2 = "abcd12341231"
+
 	UpdateName     = "テスト2"
 	UpdatePhotoUrl = "https://test2"
 
@@ -231,9 +236,12 @@ func TestCreateCommentRequestError(t *testing.T) {
 func TestGetCommentsSuccess(t *testing.T) {
 	InitUserTable()
 
-	comment1 := model.Comment{UserId: UserId, PostId: PostId, Content: Content}
-	comment2 := model.Comment{UserId: UserId2, PostId: PostId, Content: Content2}
-	comment3 := model.Comment{UserId: UserId2, PostId: int32(32), Content: "あああ"}
+	userId1 := CreateUserForTest()
+	userId2 := CreateUserForTest()
+
+	comment1 := model.Comment{UserId: userId1, PostId: PostId, Content: Content}
+	comment2 := model.Comment{UserId: userId2, PostId: PostId, Content: Content2}
+	comment3 := model.Comment{UserId: userId2, PostId: int32(32), Content: "あああ"}
 	CreateCommentForTest(comment1)
 	CreateCommentForTest(comment2)
 	CreateCommentForTest(comment3)
@@ -247,12 +255,15 @@ func TestGetCommentsSuccess(t *testing.T) {
 
 	assert.Equal(t, int32(2), count, "The two words should be the same.")
 
-	assert.Equal(t, UserId2, commentList[0].UserId, "The two words should be the same.")
+	assert.Equal(t, userId2, commentList[0].UserId, "The two words should be the same.")
 	assert.Equal(t, Content2, commentList[0].Content, "The two words should be the same.")
-
-	assert.Equal(t, UserId, commentList[1].UserId, "The two words should be the same.")
+	assert.Equal(t, Name2, commentList[0].Name, "The two words should be the same.")
+	assert.Equal(t, PhotoUrl2, commentList[0].PhotoUrl, "The two words should be the same.")
+	
+	assert.Equal(t, userId1, commentList[1].UserId, "The two words should be the same.")
 	assert.Equal(t, Content, commentList[1].Content, "The two words should be the same.")
-
+	assert.Equal(t, Name, commentList[0].Name, "The two words should be the same.")
+	assert.Equal(t, PhotoUrl, commentList[0].PhotoUrl, "The two words should be the same.")
 }
 
 // コメント一覧取得　エラー
@@ -272,6 +283,18 @@ func CreateUserForTest() int32 {
 	password := string(hash)
 	user := model.User{Name: Name, Email: Email,
 		PhotoUrl: PhotoUrl, Password: password}
+	db := db.Connection()
+	defer db.Close()
+	db.Create(&user)
+
+	return user.ID
+}
+
+func CreateUserForTest2() int32 {
+	hash, _ := bcrypt.GenerateFromPassword([]byte(Password2), 10)
+	password := string(hash)
+	user := model.User{Name: Name2, Email: Email2,
+		PhotoUrl: PhotoUrl2, Password: password}
 	db := db.Connection()
 	defer db.Close()
 	db.Create(&user)

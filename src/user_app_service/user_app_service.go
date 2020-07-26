@@ -140,6 +140,7 @@ func GetComments(request pb.GetCommentsRequest) ([]*pb.Comment, int32, error) {
 	var comments []model.Comment
 	var commentList []*pb.Comment
 	var count int32
+	var user model.User
 
 	err := user_service.CheckGetCommentsRequest(request)
 	if err != nil {
@@ -154,5 +155,13 @@ func GetComments(request pb.GetCommentsRequest) ([]*pb.Comment, int32, error) {
 	db.Where("post_id = ?", request.PostId).Limit(limit).Offset(offset).Order("id desc").Find(&comments).Scan(&commentList)
 	db.Table("comments").Where("post_id = ?", request.PostId).Find(&comments).Count(&count)
 
+	for i := 0; i < len(commentList); i++ {
+		user = model.User{}
+		db.Find(&user, commentList[i].UserId)
+
+		commentList[i].Name = user.Name
+		commentList[i].PhotoUrl = user.PhotoUrl
+	}
+	
 	return commentList, count, nil
 }

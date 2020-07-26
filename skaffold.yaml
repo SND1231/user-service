@@ -1,0 +1,18 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+  - image: snd1231/user
+    context: .
+    docker:
+      dockerfile: ./docker/Dockerfile
+      buildArgs:
+        SECRET_KEY: "{{.SECRET_KEY}}"
+  local:
+    push: true
+
+deploy:
+  kubectl:
+    manifests:
+      - user-deployment.yaml
+
