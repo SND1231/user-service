@@ -59,6 +59,7 @@ jobs:
       - run:
           name: Push image to registory
           command: docker push ${DOCKER_USER}/user
+
   deploy:
     docker:
       - image: docker:18.09
