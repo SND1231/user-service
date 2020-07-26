@@ -108,8 +108,11 @@ workflows:
   version: 2.1
   build-test-and-deploy:
     jobs:
+      - test
       - image-push:
           context: ramen_app
+          requires:
+            - test
       - deploy:
           context: ramen_app
           requires:
